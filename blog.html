@@ -10,18 +10,17 @@
     :root {
       --bg:        #0a0a0a;
       --red:       #e02030;
-      --red-dim:   rgba(224, 32, 48, 0.07);
       --text:      #e8e3de;
-      --text-muted:#62584f;
-      --text-dim:  #2e2824;
-      --border:    rgba(224, 32, 48, 0.16);
+      --text-muted:#5a5550;
+      --text-dim:  #2a2520;
+      --border:    #1c1c1c;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background-color: var(--bg);
-      background-image: radial-gradient(rgba(224, 32, 48, 0.045) 1px, transparent 1px);
+      background-image: radial-gradient(rgba(255,255,255,0.028) 1px, transparent 1px);
       background-size: 28px 28px;
       color: var(--text);
       font-family: 'JetBrains Mono', monospace;
@@ -40,8 +39,8 @@
         0deg,
         transparent 0px,
         transparent 3px,
-        rgba(0, 0, 0, 0.07) 3px,
-        rgba(0, 0, 0, 0.07) 4px
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
       );
       pointer-events: none;
       z-index: 9999;
@@ -71,13 +70,13 @@
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--red);
+      color: #666;
       text-decoration: none;
-      transition: opacity 0.2s;
+      transition: color 0.2s;
     }
-    .nav-links a:hover { opacity: 0.65; }
-    .nav-links a.active { opacity: 1; border-bottom: 1px solid var(--red); }
-    .nav-sep { color: var(--text-dim); font-size: 11px; }
+    .nav-links a:hover { color: #ccc; }
+    .nav-links a.active { color: #ccc; }
+    .nav-sep { color: #2a2520; font-size: 11px; }
 
     main {
       max-width: 1280px;
@@ -98,17 +97,15 @@
 
     .page-sub {
       font-size: 12px;
-      font-weight: 300;
-      color: var(--text-muted);
+      color: #aaa;
+      font-weight: 400;
       margin-bottom: 48px;
     }
-    .page-sub::before { content: '// '; color: var(--red); opacity: 0.6; }
 
-    .red-rule {
+    .rule {
       width: 100%;
       height: 1px;
-      background: linear-gradient(90deg, var(--red) 0%, transparent 100%);
-      opacity: 0.35;
+      background: var(--border);
       margin-bottom: 0;
     }
 
@@ -167,7 +164,7 @@
   <main>
     <div class="page-title">Writing</div>
     <div class="page-sub">Occasional pieces on security, systems, and whatever demands attention.</div>
-    <div class="red-rule"></div>
+    <div class="rule"></div>
     <div class="empty-state">
       <div class="empty-label">Posts</div>
       <div class="empty-msg">Nothing published yet. Check back soon.</div>
