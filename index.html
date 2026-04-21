@@ -5,30 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sean McNally</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:         #0c0b09;
-      --orange:     #d4712a;
-      --orange-dim: rgba(212, 113, 42, 0.08);
-      --text:       #e6e0d6;
-      --text-muted: #9a8e80;
-      --text-dim:   #6a5c4e;
-      --border:     rgba(212, 113, 42, 0.14);
+      --bg:        #0a0a0a;
+      --red:       #e02030;
+      --text:      #e8e3de;
+      --text-muted:#5a5550;
+      --text-dim:  #2a2520;
+      --border:    #1c1c1c;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       background-color: var(--bg);
-      background-image: radial-gradient(ellipse 60% 40% at 50% -5%, rgba(180, 90, 20, 0.12) 0%, transparent 65%);
+      background-image: radial-gradient(rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 28px 28px;
       color: var(--text);
-      font-family: 'Inter', sans-serif;
+      font-family: 'JetBrains Mono', monospace;
       font-weight: 300;
-      font-size: 17px;
-      line-height: 1.75;
+      font-size: 14px;
+      line-height: 1.7;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--red);
+      z-index: 10001;
     }
 
     /* ── NAV ── */
@@ -36,245 +62,323 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 26px 60px;
+      padding: 20px 48px;
       border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 10;
     }
 
     .logo {
-      font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
-      color: var(--orange);
-      letter-spacing: 0.1em;
-      text-decoration: none;
-      opacity: 0.8;
-      transition: opacity 0.2s;
-    }
-    .logo:hover { opacity: 1; }
-
-    .nav-links { display: flex; gap: 36px; }
-    .nav-links a {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
       color: var(--text-muted);
+      letter-spacing: 0.06em;
       text-decoration: none;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a.active { color: var(--orange); }
+    .logo:hover { color: var(--text); }
+
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #ccc; }
+    .nav-sep { color: #2a2520; font-size: 11px; }
 
     /* ── MAIN ── */
     main {
-      max-width: 860px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 96px 48px 96px;
+      padding: 52px 48px 60px;
+      position: relative;
+      z-index: 10;
     }
 
-    /* ── SECTION DIVIDER ── */
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--border);
-      margin: 72px 0;
+    main::before {
+      content: '>_';
+      position: absolute;
+      right: 44px;
+      top: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(100px, 16vw, 240px);
+      color: #fff;
+      opacity: 0.025;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
     }
 
     /* ── HERO ── */
-    .hero { text-align: center; }
+    .hero { margin-bottom: 52px; }
 
-    .hero-eyebrow {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      color: var(--orange);
-      letter-spacing: 0.18em;
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 16vw, 220px);
+      line-height: 0.88;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      margin-bottom: 18px;
+      display: block;
+      cursor: default;
+    }
+
+    .hero-name:hover { animation: glitch 0.35s ease; }
+
+    @keyframes glitch {
+      0%   { transform: translate(0);    text-shadow: none; }
+      20%  { transform: translate(-2px); text-shadow: 1.5px 0 var(--red), -1.5px 0 #00f0ff; }
+      40%  { transform: translate( 2px); text-shadow: none; }
+      60%  { transform: translate(-1px); text-shadow: 1px 0 var(--red); }
+      80%  { transform: translate( 1px); text-shadow: none; }
+      100% { transform: translate(0);    text-shadow: none; }
+    }
+
+    .hero-name .line { display: block; }
+
+    .hero-name .char {
+      display: inline-block;
+      opacity: 0;
+      transition: opacity 0.06s ease;
+    }
+    .hero-name .char.on { opacity: 1; }
+
+    .cursor {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 16vw, 220px);
+      line-height: 0.88;
+      color: var(--red);
+      opacity: 0;
+    }
+    .cursor.show { opacity: 1; animation: blink 1s step-end infinite; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .hero-sub {
+      font-size: 11px;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      opacity: 0.75;
+      color: #999;
       margin-bottom: 20px;
     }
-
-    .hero h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(58px, 9vw, 92px);
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.035em;
-      line-height: 1.02;
-      margin-bottom: 28px;
-    }
+    .hero-sub::before { content: '// '; color: #666; }
 
     .hero-bio {
-      font-size: 17px;
-      font-weight: 300;
-      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 400;
+      color: #aaa;
       line-height: 1.85;
-      max-width: 500px;
-      margin: 0 auto;
+      max-width: 540px;
     }
 
-    /* ── CONNECT (full-width, centered) ── */
-    .connect { text-align: center; }
+    /* ── DIVIDER ── */
+    .rule {
+      width: 100%;
+      height: 1px;
+      background: #1a1a1a;
+      margin: 44px 0;
+    }
 
+    /* ── SECTION HEADING ── */
     .section-heading {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(36px, 5vw, 52px);
-      font-weight: 700;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(34px, 4.5vw, 64px);
       color: var(--text);
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-      margin-bottom: 12px;
+      letter-spacing: 0.07em;
+      line-height: 1.0;
+      margin-bottom: 8px;
     }
 
     .section-sub {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 400;
+      color: #aaa;
+      margin-bottom: 28px;
+      max-width: 440px;
       line-height: 1.7;
-      margin-bottom: 36px;
     }
 
-    .connect .section-sub { max-width: 460px; margin: 0 auto 36px; }
-
+    /* ── CONNECT GRID ── */
     .connect-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--border);
+      gap: 10px;
     }
 
-    .connect-cell {
+    .connect-card {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 40px 20px;
+      gap: 5px;
+      padding: 24px 22px;
+      background: #0f0f0f;
+      border: 1px solid #1e1e1e;
       text-decoration: none;
-      border-right: 1px solid var(--border);
-      transition: background 0.18s;
+      transition: background 0.2s, border-color 0.2s;
     }
-    .connect-cell:last-child { border-right: none; }
-    .connect-cell:hover { background: var(--orange-dim); }
+    .connect-card:hover {
+      background: #141414;
+      border-color: #333;
+    }
 
     .connect-platform {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 22px;
-      font-weight: 600;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 30px;
+      letter-spacing: 0.04em;
       color: var(--text);
-      letter-spacing: -0.02em;
-      transition: color 0.18s;
+      line-height: 1.0;
+      position: relative;
+      display: inline-block;
     }
 
+    .connect-platform::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--text);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .connect-card:hover .connect-platform::after { transform: scaleX(1); }
+
     .connect-handle {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
+      font-size: 10px;
       color: var(--text-muted);
-      transition: color 0.18s;
+      letter-spacing: 0.04em;
     }
 
     .connect-arrow {
-      font-size: 14px;
-      color: var(--text-dim);
-      margin-top: 2px;
-      transition: color 0.18s, transform 0.18s;
+      font-size: 11px;
+      color: #333;
+      margin-top: 10px;
+      display: block;
+      transition: color 0.2s, transform 0.2s;
     }
+    .connect-card:hover .connect-arrow { color: #888; transform: translate(3px, -3px); }
 
-    .connect-cell:hover .connect-platform { color: var(--orange); }
-    .connect-cell:hover .connect-handle   { color: var(--text); }
-    .connect-cell:hover .connect-arrow    { color: var(--orange); transform: translate(2px, -2px); }
-
-    /* ── BOTTOM TWO-COLUMN GRID ── */
+    /* ── BOTTOM GRID ── */
     .bottom-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0;
     }
 
-    .bottom-col { text-align: left; }
     .bottom-col:first-child { padding-right: 52px; }
     .bottom-col:last-child  { padding-left: 52px; border-left: 1px solid var(--border); }
+    .bottom-col .section-heading { font-size: clamp(24px, 3vw, 42px); }
 
-    .bottom-col .section-heading {
-      font-size: clamp(26px, 3.5vw, 36px);
-    }
-
-    /* ── PROJECT / WRITING ROWS ── */
-    .item-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 0;
+    /* ── TERMINAL CARDS ── */
+    .terminal-card {
+      display: block;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       text-decoration: none;
-      transition: all 0.15s;
-      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s, padding-left 0.25s;
     }
-    .item-link:first-of-type { border-top: 1px solid var(--border); }
 
-    .item-link-left { display: flex; flex-direction: column; gap: 5px; }
+    .terminal-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: #555;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.25s ease;
+    }
+    .terminal-card:hover::before { transform: scaleY(1); }
+    .terminal-card:hover { background: #0e0e0e; padding-left: 22px; }
 
-    .item-name {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 13px;
+    .terminal-path {
+      font-size: 12px;
       font-weight: 500;
       color: var(--text);
-      transition: color 0.15s;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+      transition: color 0.2s;
     }
+    .terminal-path::before { content: './ '; color: #555; font-weight: 300; }
+    .terminal-card:hover .terminal-path { color: var(--text); }
 
-    .item-desc {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--text-muted);
-      line-height: 1.5;
-      transition: color 0.15s;
+    .terminal-desc {
+      font-size: 11px;
+      font-weight: 400;
+      color: #aaa;
+      line-height: 1.65;
+      transition: color 0.2s;
     }
+    .terminal-card:hover .terminal-desc { color: #888; }
 
-    .item-arrow {
-      font-size: 14px;
-      color: var(--text-dim);
-      flex-shrink: 0;
-      align-self: center;
-      transition: color 0.15s, transform 0.15s;
+    .terminal-arrow {
+      font-size: 12px;
+      color: var(--red);
+      margin-top: 8px;
+      display: block;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
+    .terminal-card:hover .terminal-arrow { opacity: 1; transform: translateX(0); }
 
-    .item-link:hover .item-name  { color: var(--orange); }
-    .item-link:hover .item-desc  { color: var(--text); }
-    .item-link:hover .item-arrow { color: var(--orange); transform: translate(2px, -2px); }
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ── FOOTER ── */
     footer {
-      padding: 20px 60px;
+      padding: 14px 48px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
+      position: relative;
+      z-index: 10;
     }
 
     .footer-text {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-dim);
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
     }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 680px) {
-      nav    { padding: 20px 24px; }
-      main   { padding: 64px 24px 72px; }
-      footer { padding: 18px 24px; }
-      .section-divider { margin: 56px 0; }
+    @media (max-width: 768px) {
+      nav    { padding: 16px 24px; }
+      main   { padding: 36px 24px 48px; }
+      footer { padding: 14px 24px; }
       .connect-grid { grid-template-columns: 1fr; }
-      .connect-cell { border-right: none; border-bottom: 1px solid var(--border); padding: 28px 20px; }
-      .connect-cell:last-child { border-bottom: none; }
-      .bottom-grid { grid-template-columns: 1fr; gap: 56px; }
-      .bottom-col:first-child { padding-right: 0; }
-      .bottom-col:last-child  { padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 56px; }
+      .bottom-grid  { grid-template-columns: 1fr; }
+      .bottom-col:first-child { padding-right: 0; padding-bottom: 40px; }
+      .bottom-col:last-child  { padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 40px; }
     }
   </style>
 </head>
 <body>
 
+  <div class="scroll-progress" id="scrollProgress"></div>
+
   <nav>
     <a class="logo" href="/index.html">seancloud.org</a>
     <div class="nav-links">
-      <a href="/index.html" class="active">Home</a>
+      <a href="/index.html">Home</a>
+      <span class="nav-sep">|</span>
       <a href="/blog.html">Writing</a>
     </div>
   </nav>
@@ -282,73 +386,120 @@
   <main>
 
     <section class="hero">
-      <div class="hero-eyebrow">Cybersecurity &middot; Purdue University</div>
-      <h1>Sean McNally</h1>
-      <p class="hero-bio">
-        Final-year cybersecurity student building toward a senior role in security engineering or security leadership. Interested in the full stack — from threat modeling and offensive research to the systems and people that make organizations actually secure. Add a sentence or two that makes you specifically interesting here.
-      </p>
+      <div class="hero-name" aria-label="Sean McNally">
+        <span class="line" id="line1">SEAN</span>
+        <span class="line"><span id="line2">MCNALLY</span><span class="cursor" id="cursor">_</span></span>
+      </div>
+      <div class="hero-sub">Cybersecurity &middot; Purdue University Class of 2026</div>
+      <p class="hero-bio">Final-year cybersecurity student pursuing a role in security engineering or leadership, graduating in May 2026. For the past two years, I have worked as a Cybersecurity Analyst at Magnetar Capital ($18B+ AUM), where I have built and owned production security tooling and infrastructure, protecting the systems that drive the firm’s innovation and performance.
     </section>
 
-    <div class="section-divider"></div>
+    <div class="rule reveal"></div>
 
-    <section class="connect">
-      <h2 class="section-heading">Let's Connect.</h2>
-      <p class="section-sub">I'm actively looking for senior security engineering and leadership roles. Reach out — I'd love to talk.</p>
+    <section class="connect reveal">
+      <div class="section-heading">Let's Connect.</div>
+    <p class="section-sub">Reach out! I'd love to talk.</p>
       <div class="connect-grid">
-        <a class="connect-cell" href="https://github.com/seanmcnally256" target="_blank" rel="noopener">
-          <span class="connect-platform">GitHub</span>
-          <span class="connect-handle">seanmcnally256</span>
-          <span class="connect-arrow">↗</span>
-        </a>
-        <a class="connect-cell" href="https://www.linkedin.com/in/sean-mcnally1" target="_blank" rel="noopener">
+        
+        <a class="connect-card" href="https://www.linkedin.com/in/sean-mcnally1" target="_blank" rel="noopener">
           <span class="connect-platform">LinkedIn</span>
           <span class="connect-handle">sean-mcnally1</span>
           <span class="connect-arrow">↗</span>
         </a>
-        <a class="connect-cell" href="mailto:seanmcnally1600@gmail.com">
+        <a class="connect-card" href="mailto:seanmcnally1600@gmail.com">
           <span class="connect-platform">Email</span>
           <span class="connect-handle">seanmcnally1600@gmail.com</span>
+          <span class="connect-arrow">↗</span>
+        </a>
+        <a class="connect-card" href="https://github.com/seanmcnally256" target="_blank" rel="noopener">
+          <span class="connect-platform">GitHub</span>
+          <span class="connect-handle">seanmcnally256</span>
           <span class="connect-arrow">↗</span>
         </a>
       </div>
     </section>
 
-    <div class="section-divider"></div>
+    <div class="rule reveal"></div>
 
     <div class="bottom-grid">
-
-      <section class="bottom-col">
-        <h2 class="section-heading">What I'm Building.</h2>
-        <p class="section-sub">Projects I've shipped and things I'm actively working on.</p>
-        <a class="item-link" href="https://github.com/seanmcnally256/k3s-homelab" target="_blank" rel="noopener">
-          <div class="item-link-left">
-            <span class="item-name">k3s-homelab</span>
-            <span class="item-desc">Bootstrap a k3s cluster in AWS with Terraform, cloud-init, and k3sup</span>
-          </div>
-          <span class="item-arrow">↗</span>
+      <section class="bottom-col reveal">
+        <div class="section-heading">What I'm Building.</div>
+        <p class="section-sub">Projects I'm actively working on.</p>
+        <a class="terminal-card" href="https://github.com/seanmcnally256/k3s-homelab" target="_blank" rel="noopener">
+          <div class="terminal-path">k3s-homelab</div>
+          <div class="terminal-desc">Bootstrap a k3s cluster in AWS with Terraform, cloud-init, and k3sup</div>
+          <div class="terminal-arrow">→</div>
         </a>
       </section>
 
-      <section class="bottom-col">
-        <h2 class="section-heading">What I'm Writing.</h2>
-        <p class="section-sub">Occasional pieces on security, systems, and whatever demands attention.</p>
-        <a class="item-link" href="/blog.html">
-          <div class="item-link-left">
-            <span class="item-name">writing</span>
-            <span class="item-desc">Whitepapers, breakdowns, and notes on topics I find genuinely interesting</span>
-          </div>
-          <span class="item-arrow">↗</span>
+      <section class="bottom-col reveal" style="transition-delay: 0.12s;">
+        <div class="section-heading">What I'm Writing.</div>
+        <p class="section-sub">Occasional pieces on security, systems, and more.</p>
+        <a class="terminal-card" href="/blog.html">
+          <div class="terminal-path">writing</div>
+          <div class="terminal-desc">Whitepapers, breakdowns, and notes on topics I find interesting</div>
+          <div class="terminal-arrow">→</div>
         </a>
       </section>
-
     </div>
 
   </main>
 
   <footer>
-    <span class="footer-text">&copy; 2026 Sean McNally</span>
+    <span class="footer-text">© 2026 Sean McNally</span>
     <span class="footer-text">seancloud.org</span>
   </footer>
+
+  <script>
+    // ── SCROLL PROGRESS ──
+    const progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = total > 0 ? (window.scrollY / total * 100) + '%' : '0%';
+    }, { passive: true });
+
+    // ── CHARACTER REVEAL ──
+    function wrapChars(el) {
+      el.innerHTML = [...el.textContent].map(c =>
+        c === ' ' ? ' ' : `<span class="char">${c}</span>`
+      ).join('');
+      return el.querySelectorAll('.char');
+    }
+
+    function revealChars(chars, startDelay, charDelay, onDone) {
+      chars.forEach((char, i) => {
+        setTimeout(() => {
+          char.classList.add('on');
+          if (i === chars.length - 1 && onDone) onDone();
+        }, startDelay + i * charDelay);
+      });
+    }
+
+    const line1El  = document.getElementById('line1');
+    const line2El  = document.getElementById('line2');
+    const cursorEl = document.getElementById('cursor');
+
+    const line1Chars = wrapChars(line1El);
+    const line2Chars = wrapChars(line2El);
+
+    revealChars(line1Chars, 150, 85, () => {
+      revealChars(line2Chars, 50, 85, () => {
+        cursorEl.classList.add('show');
+      });
+    });
+
+    // ── SCROLL REVEAL ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
